@@ -3,7 +3,7 @@ self.addEventListener('install', function(event) {
         caches.open('static-v3').then(function(cache) {
             return cache.addAll([
                 '/',
-                '/main.js',
+                '/static/js/main.js',
                 '//cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.debug.js'
             ]);
         })
