@@ -1,6 +1,6 @@
 self.addEventListener('install', function(event) {
     event.waitUntil(
-        caches.open('static-v3').then(function(cache) {
+        caches.open('static-v4').then(function(cache) {
             return cache.addAll([
                 '/atoz2',
                 '/atoz2/static/js/main.js',
