@@ -1,13 +1,17 @@
 import jsPDF from 'jspdf/dist/jspdf.debug.js';
 import React from 'react';
+
 import SignaturePad from 'react-signature-pad';
-import MaterialUiForm from './MaterialUiForm';
+import InvoiceForm from './InvoiceForm';
+import SignTable from './SignTable';
+import { Grid, Row, Col } from 'react-flexbox-grid';
 import {
     Step,
     Stepper,
     StepLabel,
     StepContent,
 } from 'material-ui/Stepper';
+
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 
@@ -47,80 +51,92 @@ class InvoiceStepper extends React.Component {
         doc.save('autoprint.pdf')
     }
 
-    renderInvoiceForm() {
-        return (
-            <div>
-                <MaterialUiForm afterSubmit={this.handleNext}/>
-            </div>
-        );
-    }
+    // renderInvoiceForm() {
+    //     return (
+    //         <div>
+    //
+    //         </div>
+    //     );
+    // }
 
     render() {
         const {finished, stepIndex} = this.state;
 
+
         return (
-            <div style={{maxWidth: 380, maxHeight: 400, margin: 'auto'}}>
-                <Stepper activeStep={stepIndex} orientation="vertical">
-                    <Step>
-                        <StepLabel>Input appliances and customer data</StepLabel>
-                        <StepContent>
-                            {this.renderInvoiceForm()}
-                        </StepContent>
-                    </Step>
-                    <Step>
-                        <StepLabel>Sign up invoice</StepLabel>
-                        <StepContent>
-                            <div style={ {border: '1px dashed #555555', marginBottom: '10px'} }>
-                                <SignaturePad clearButton="true" />
-                            </div>
-                            <FlatButton
-                                label="Back"
-                                disabled={stepIndex === 0}
-                                disableTouchRipple={true}
-                                disableFocusRipple={true}
-                                onTouchTap={this.handlePrev}
-                            />
-                            <RaisedButton
-                                label="Get PDF"
-                                primary={true}
-                                onTouchTap={this.getPDF}
-                                style={{marginLeft: 12}}
-                            />
-                            <RaisedButton
-                                label="Save"
-                                primary={true}
-                                disabled={true}
-                                style={{marginLeft: 12}}
-                            />
-                            <RaisedButton
-                                label="Export"
-                                primary={true}
-                                disabled={true}
-                                style={{marginLeft: 12}}
-                            />
-                            <RaisedButton
-                                label="Send"
-                                primary={true}
-                                disabled={true}
-                                style={{marginLeft: 12}}
-                            />
-                        </StepContent>
-                    </Step>
-                </Stepper>
-                {finished && (
-                    <p style={{margin: '20px 0', textAlign: 'center'}}>
-                        <a
-                            href="#"
-                            onClick={(event) => {
-                                event.preventDefault();
-                                this.setState({stepIndex: 0, finished: false});
-                            }}
-                        >
-                            Click here
-                        </a> to reset the example.
-                    </p>
-                )}
-            </div>
+        <Grid>
+            <Row>
+                <Col md={7} mdOffset={3} sm={10} smOffset={1} >
+                    <Stepper activeStep={stepIndex} orientation="vertical">
+                        <Step>
+
+                            <StepLabel>Input appliances and customer data</StepLabel>
+                            <StepContent>
+                                <Row>
+                                    <Col sm={8} smOffset={2} >
+                                        <InvoiceForm afterSubmit={this.handleNext}/>
+                                    </Col>
+                                </Row>
+                            </StepContent>
+                        </Step>
+                        <Step>
+                            <StepLabel>Sign up invoice</StepLabel>
+                            <StepContent>
+                                <SignTable/>
+
+                                <div style={ {border: '1px dashed #555555', marginBottom: '10px'} }>
+                                    <SignaturePad clearButton="true" />
+                                </div>
+                                <FlatButton
+                                    label="Back"
+                                    disabled={stepIndex === 0}
+                                    disableTouchRipple={true}
+                                    disableFocusRipple={true}
+                                    onTouchTap={this.handlePrev}
+                                />
+                                <RaisedButton
+                                    label="Get PDF"
+                                    primary={true}
+                                    onTouchTap={this.getPDF}
+                                    style={{marginLeft: 12}}
+                                />
+                                <RaisedButton
+                                    label="Save"
+                                    primary={true}
+                                    disabled={true}
+                                    style={{marginLeft: 12}}
+                                />
+                                <RaisedButton
+                                    label="Export"
+                                    primary={true}
+                                    disabled={true}
+                                    style={{marginLeft: 12}}
+                                />
+                                <RaisedButton
+                                    label="Send"
+                                    primary={true}
+                                    disabled={true}
+                                    style={{marginLeft: 12}}
+                                />
+                            </StepContent>
+                        </Step>
+                    </Stepper>
+                    {finished && (
+                        <p style={{margin: '20px 0', textAlign: 'center'}}>
+                            <a
+                                href="#"
+                                onClick={(event) => {
+                                    event.preventDefault();
+                                    this.setState({stepIndex: 0, finished: false});
+                                }}
+                            >
+                                Click here
+                            </a> to reset the example.
+                        </p>
+                    )}
+                </Col>
+            </Row>
+        </Grid>
         );
     }
 }
