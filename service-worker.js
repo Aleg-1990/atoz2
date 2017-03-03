@@ -1,11 +1,10 @@
 self.addEventListener('install', function(event) {
-    const CACHE_VERSION = 7;
+    const CACHE_VERSION = 8;
     event.waitUntil(
         caches.open('static-'+CACHE_VERSION).then(function(cache) {
-            // for (i = 0; i < CACHE_VERSION; i++) {
-            //     caches.delete('static-v'+i);
-            // }
-            caches.delete('static-'+CACHE_PREV_VERSION);
+            for (i = 0; i < CACHE_VERSION; i++) {
+                caches.delete('static-v'+i);
+            }
             return cache.addAll([
                 '/atoz2',
                 '/atoz2/static/js/main.js',
