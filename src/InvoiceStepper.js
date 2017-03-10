@@ -1,5 +1,7 @@
 import jsPDF from 'jspdf/dist/jspdf.debug.js';
 import React from 'react';
+import { formValueSelector } from 'redux-form'
+import { connect } from 'react-redux'
 
 import SignaturePad from 'react-signature-pad';
 import InvoiceForm from './InvoiceForm';
@@ -47,7 +49,7 @@ class InvoiceStepper extends React.Component {
 
     getPDF = () => {
         const doc = new jsPDF()
-        doc.text(10, 10, 'This is a test')
+        doc.text(10, 10, this.props.first_name)
         doc.save('autoprint.pdf')
     }
 
@@ -84,40 +86,32 @@ class InvoiceStepper extends React.Component {
                             <StepContent>
                                 <SignTable/>
 
-                                <div style={ {border: '1px dashed #555555', marginBottom: '10px'} }>
+                                <label>Customer signature:</label>
+                                {stepIndex == 1 &&
+                                <div style={ {margin: '10px auto', position: 'relative', width: '100%', height: '50vw'} }>
                                     <SignaturePad clearButton="true" />
+                                </div>}
+
+                                <div>
+                                    <Row around="xs">
+                                        <Col xs={5} sm={3}>
+                                            <FlatButton
+                                                label="Back"
+                                                disabled={stepIndex === 0}
+                                                onTouchTap={this.handlePrev}
+                                            />
+                                        </Col>
+                                        <Col xs={5} sm={3}>
+                                            <RaisedButton
+                                                label="Get PDF"
+                                                primary={true}
+                                                fullWidth={true}
+                                                onTouchTap={this.getPDF}
+                                            />
+                                        </Col>
+                                    </Row>
                                 </div>
-                                <FlatButton
-                                    label="Back"
-                                    disabled={stepIndex === 0}
-                                    disableTouchRipple={true}
-                                    disableFocusRipple={true}
-                                    onTouchTap={this.handlePrev}
-                                />
-                                <RaisedButton
-                                    label="Get PDF"
-                                    primary={true}
-                                    onTouchTap={this.getPDF}
-                                    style={{marginLeft: 12}}
-                                />
-                                <RaisedButton
-                                    label="Save"
-                                    primary={true}
-                                    disabled={true}
-                                    style={{marginLeft: 12}}
-                                />
-                                <RaisedButton
-                                    label="Export"
-                                    primary={true}
-                                    disabled={true}
-                                    style={{marginLeft: 12}}
-                                />
-                                <RaisedButton
-                                    label="Send"
-                                    primary={true}
-                                    disabled={true}
-                                    style={{marginLeft: 12}}
-                                />
+
                             </StepContent>
                         </Step>
                     </Stepper>
@@ -140,5 +134,10 @@ class InvoiceStepper extends React.Component {
         );
     }
 }
+
+const selector = formValueSelector('invoice');
+InvoiceStepper = connect(
+    state => selector(state, 'appliances', 'first_name', 'last_name', 'amount_due', 'estimate', 'payment_method', 'check_number', 'address', 'email')
+)(InvoiceStepper);
 
 export default InvoiceStepper;

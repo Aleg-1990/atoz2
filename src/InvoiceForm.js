@@ -46,7 +46,7 @@ const validate = values => {
     }
 
 
-    const requiredFields = ['address', 'region', 'amount_due', 'payment_method', 'check', 'first_name', 'last_name', 'email']
+    const requiredFields = ['address', 'region', 'amount_due', 'payment_method', 'check_number', 'first_name', 'last_name', 'email']
     requiredFields.forEach(field => {
         if (!values[ field ]) {
             errors[ field ] = 'Required'
@@ -71,7 +71,7 @@ const RadioGroupRedux = ({ input, label, meta: { touched, error }, ...rest }) =>
 
 let InvoiceForm = props => {
 
-    const {paymentByCheck, afterSubmit, handleSubmit, pristine, reset, submitting } = props
+    const {paymentByCheck, amountZero, afterSubmit, handleSubmit, pristine, reset, submitting } = props
 
     return (
         <div className="container">
@@ -112,6 +112,7 @@ let InvoiceForm = props => {
                         '$125.00'
                     ]}/>
             </div>
+            {!amountZero &&
             <Field name="payment_method"
                    component={SelectFieldRedux}
                    label="Payment">
@@ -120,7 +121,7 @@ let InvoiceForm = props => {
                 <MenuItem value={'Cash'} primaryText="Cash"/>
                 <MenuItem value={'Check'} primaryText="Check"/>
                 <MenuItem value={'Not collected'} primaryText="Not collected"/>
-            </Field>
+            </Field>}
 
             {paymentByCheck && <Field
                 name="check_number"
@@ -156,13 +157,13 @@ let InvoiceForm = props => {
             </div>
 
             <Row around="xs">
-                <Col xs={2}>
+                <Col xs={4} sm={2}>
                     <RaisedButton
                         label="Clear"
                         type="button"
                         onClick={reset}/>
                 </Col>
-                <Col xs={2} >
+                <Col xs={4} sm={2}>
                     <RaisedButton
                         label="Next"
                         style={ {float:'right'} }
@@ -191,8 +192,10 @@ InvoiceForm = connect(
     state => {
         // can select values individually
         const paymentByCheck = selector(state, 'payment_method') === 'Check';
+        const amountZero = selector(state, 'amount_due') === '$0';
         return {
-            paymentByCheck
+            paymentByCheck,
+            amountZero
         }
     }
 )(InvoiceForm)

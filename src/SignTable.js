@@ -19,7 +19,7 @@ Item.propTypes = {
 
 class SignTable extends Component {
     render() {
-        const{appliances, first_name, last_name} = this.props;
+        const {appliances, first_name, last_name, estimate, payment_method, check_number} = this.props;
         return (
             <div>
                 {appliances.map((appliance, i) => {
@@ -124,6 +124,25 @@ class SignTable extends Component {
                     <Col xs={6} sm={3}>
                         <Item label="Customer last name" value={last_name}/>
                     </Col>
+                    {this.props.amount_due !== '$0' &&
+                    <Col xs={6}  sm={2}>
+                        <Item label="Payment" value={payment_method == 'Check' ? payment_method+', '+check_number : payment_method}/>
+                    </Col>}
+                    {estimate &&
+                    <Col xs={6}  sm={2}>
+                        <Item label="Estimate" value={'$'+parseFloat(estimate).toFixed(2)}/>
+                    </Col>}
+                    <Col xs={6}  sm={2}>
+                        <Item label="Amount due" value={this.props.amount_due}/>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs={12}  sm={6}>
+                        <Item label="Customer address" value={this.props.address}/>
+                    </Col>
+                    <Col xs={12}  sm={6}>
+                        <Item label="Customer email" value={this.props.email}/>
+                    </Col>
                 </Row>
             </div>
 
@@ -131,11 +150,9 @@ class SignTable extends Component {
     }
 }
 
-
-
 const selector = formValueSelector('invoice');
 SignTable = connect(
-    state => selector(state, 'appliances', 'first_name', 'last_name')
+    state => selector(state, 'appliances', 'first_name', 'last_name', 'amount_due', 'estimate', 'payment_method', 'check_number', 'address', 'email')
 )(SignTable);
 
 export default SignTable;
