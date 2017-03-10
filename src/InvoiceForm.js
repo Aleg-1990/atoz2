@@ -25,7 +25,14 @@ const validate = values => {
         values.appliances.forEach((appliance, memberIndex) => {
             const appliancesErrors = {}
 
-            const requiredApplianceFields = [ 'appliance', 'brand', 'model', 'serial_number', 'customer_complaint', 'tech_recommnedation', 'age', 'color', 'condition', 'size'];
+            const requiredApplianceFields = [
+                'appliance', 'brand', 'model', 'serial_number', 'customer_complaint', 'tech_recommnedation', 'age', 'color', 'condition', 'size',
+                'refrigerator_ice_maker', 'refrigerator_ice_dispenser', 'refrigerator_type',
+                'washer_location',
+                'oven_type', 'oven_convection',
+                'microwave_type',
+                'range_type', 'burner_type', 'range_convection', 'range_self_clean'
+            ];
             requiredApplianceFields.forEach(field => {
                 if (!appliance || !appliance[ field ]) {
                     appliancesErrors[ field ] = 'Required'
@@ -147,9 +154,6 @@ let InvoiceForm = props => {
                     label="Customer email"
                     placeholder="Type the email"/>
             </div>
-
-
-
 
             <Row around="xs">
                 <Col xs={2}>
