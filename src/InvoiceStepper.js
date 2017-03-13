@@ -1,4 +1,3 @@
-import jsPDF from 'jspdf/dist/jspdf.debug.js';
 import React from 'react';
 import { formValueSelector } from 'redux-form'
 import { connect } from 'react-redux'
@@ -6,6 +5,7 @@ import { connect } from 'react-redux'
 import SignaturePad from 'react-signature-pad';
 import InvoiceForm from './InvoiceForm';
 import SignTable from './SignTable';
+import getPdf from './PdfConstruct';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import {
     Step,
@@ -48,9 +48,7 @@ class InvoiceStepper extends React.Component {
     };
 
     getPDF = () => {
-        const doc = new jsPDF()
-        doc.text(10, 10, this.props.first_name)
-        doc.save('autoprint.pdf')
+        const doc = getPdf(this.props, this.refs.signature);
     }
 
     // renderInvoiceForm() {
@@ -63,7 +61,6 @@ class InvoiceStepper extends React.Component {
 
     render() {
         const {finished, stepIndex} = this.state;
-
 
         return (
         <Grid>
@@ -89,7 +86,7 @@ class InvoiceStepper extends React.Component {
                                 <label>Customer signature:</label>
                                 {stepIndex == 1 &&
                                 <div style={ {margin: '10px auto', position: 'relative', width: '100%', height: '50vw'} }>
-                                    <SignaturePad clearButton="true" />
+                                    <SignaturePad clearButton="true" ref="signature" />
                                 </div>}
 
                                 <div>
